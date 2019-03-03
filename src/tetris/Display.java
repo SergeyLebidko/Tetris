@@ -34,6 +34,12 @@ public class Display extends JPanel {
     private final int SPEEDBOARD_WIDTH = 4;
     private final int SPEEDBOARD_HEIGHT = 2;
 
+    //Положение и размеры панели сообщения
+    private final int MSG_X=1;
+    private final int MSG_Y=5;
+    private final int MSG_WIDTH=13;
+    private final int MSG_HEIGHT=10;
+
     //Количество разрядов индикатора количества очков
     private final int COUNT_SCOREBOARD_DIGITS = 4;
 
@@ -44,26 +50,25 @@ public class Display extends JPanel {
     private final Color interfaceColor = new Color(60, 60, 60);
 
     //Объект, необходим для отрисовки стакана
-    private  GlassPainter glassPainter = new GlassPainter();
+    private final GlassPainter glassPainter = new GlassPainter();
 
     //Объект необходим для отрисовки индикатора количества очков
-    private  NumberPainter scoreboardPainter = new NumberPainter(COUNT_SCOREBOARD_DIGITS);
+    private final NumberPainter scoreboardPainter = new NumberPainter(COUNT_SCOREBOARD_DIGITS);
 
     //Объект необходим для отрисовки индикатора скорости
-    private  NumberPainter speedboardPainter = new NumberPainter(COUNT_SPEEDBOARD_DIGITS);
+    private final NumberPainter speedboardPainter = new NumberPainter(COUNT_SPEEDBOARD_DIGITS);
 
     //Объект необходим для отрисовки полимино, который выпадет в стакан после текущего
-    private  PolyminoPainter polyminoPainter = new PolyminoPainter();
+    private final PolyminoPainter polyminoPainter = new PolyminoPainter();
+
+    //Объект, необходимый для отрисовки выводимых сообщений
+    private final MessagePainter messagePainter = new MessagePainter();
 
     private Game gameObject;
 
     public Display() {
         super(null);
         setBackground(backgroundColor);
-        glassPainter = new GlassPainter();
-        scoreboardPainter = new NumberPainter(COUNT_SCOREBOARD_DIGITS);
-        speedboardPainter = new NumberPainter(COUNT_SPEEDBOARD_DIGITS);
-        polyminoPainter = new PolyminoPainter();
     }
 
     public void setGameObject(Game gameObject) {
@@ -83,13 +88,43 @@ public class Display extends JPanel {
         double deltaX, deltaY;
         deltaX = (double) getWidth() / COUNT_X_CELLS;
         deltaY = (double) getHeight() / COUNT_Y_CELLS;
-        /*
-        Код отрисовки содержимого дисплея
-        - отрисовка стакана
-        - отрисовка табло очков
-        - отрисовка следующего полимино
-        - орисовка табло скорости
-         */
+        int xStart, yStart;
+        int width, height;
+
+        //Отрисовка стакана
+        xStart = (int) (GLASS_X * deltaX);
+        yStart = (int) (GLASS_Y * deltaY);
+        width = (int) (GLASS_WIDTH * deltaX);
+        height = (int) (GLASS_HEIGHT * deltaY);
+        glassPainter.paintGlass(g2d, gameObject.getGlass(), xStart, yStart, width, height);
+
+        //Отрисовка табло набранных очков
+        xStart = (int) (SCOREBOARD_X * deltaX);
+        yStart = (int) (SCOREBOARD_Y * deltaY);
+        width = (int) (SCOREBOARD_WIDTH * deltaX);
+        height = (int) (SCOREBOARD_HEIGHT * deltaY);
+        scoreboardPainter.paintNumber(g2d, gameObject.getScore(), xStart, yStart, width, height);
+
+        //Отрисовка следующего полимино
+        xStart = (int) (NEXT_POLY_BOARD_X * deltaX);
+        yStart = (int) (NEXT_POLY_BOARD_Y * deltaY);
+        width = (int) (NEXT_POLY_BOARD_WIDTH * deltaX);
+        height = (int) (NEXT_POLY_BOARD_HEIGHT * deltaY);
+        polyminoPainter.paintPolymino(g2d, gameObject.getNextPolymino(), xStart, yStart, width, height);
+
+        //Отрисовка табло скорости
+        xStart = (int) (SPEEDBOARD_X * deltaX);
+        yStart = (int) (SPEEDBOARD_Y * deltaY);
+        width = (int) (SPEEDBOARD_WIDTH * deltaX);
+        height = (int) (SPEEDBOARD_HEIGHT * deltaY);
+        speedboardPainter.paintNumber(g2d, gameObject.getSpeed(), xStart, yStart, width, height);
+
+        //Отрисовка сообщения
+        xStart = (int) (MSG_X * deltaX);
+        yStart = (int) (MSG_Y* deltaY);
+        width = (int) (MSG_WIDTH* deltaX);
+        height = (int) (MSG_HEIGHT * deltaY);
+        messagePainter.paintMessage(g2d, gameObject.getMessage(), backgroundColor, interfaceColor, xStart, yStart, width, height);
     }
 
 }

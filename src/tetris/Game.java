@@ -33,6 +33,7 @@ public class Game extends KeyAdapter implements ActionListener {
     private Polymino currentPolymino;
     private Polymino nextPolymino;
     private Timer timer;
+    private String message;
 
     public Game() {
         glass = new boolean[HEIGHT_GLASS][WIDTH_GLASS];
@@ -54,6 +55,7 @@ public class Game extends KeyAdapter implements ActionListener {
         score = 0;
         currentPolymino = polyminoCreator.getNewPolymino();
         nextPolymino = polyminoCreator.getNewPolymino();
+        message="";
         displayObject.refreshDisplay();
         timer.setDelay(getTimerMiils());
         timer.start();
@@ -82,6 +84,23 @@ public class Game extends KeyAdapter implements ActionListener {
             }
         }
         return result;
+    }
+
+    public boolean[][] getGlass(){
+        //Временный код-заглушка
+        for (int i=0;i<HEIGHT_GLASS; i++)
+            for (int j=0;j<WIDTH_GLASS;j++){
+                glass[i][j]=true;
+            }
+        return glass;
+    }
+
+    public Polymino getNextPolymino(){
+        return null;
+    }
+
+    public String getMessage(){
+        return "";
     }
 
     private int getTimerMiils(){
