@@ -1,5 +1,10 @@
 package tetris;
 
+import tetris.painters.GlassPainter;
+import tetris.painters.MessagePainter;
+import tetris.painters.NumberPainter;
+import tetris.painters.PolyminoPainter;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,44 +12,44 @@ public class Display extends JPanel {
 
     //Элементы интерфейса игры привязаны к узлам сетки
     //Следующие две константы определяют количество ячеек этой сетки по горизонтали и по вертикали
-    private final int COUNT_X_CELLS = 15;
-    private final int COUNT_Y_CELLS = 20;
+    private static final int COUNT_X_CELLS = 16;
+    private static final int COUNT_Y_CELLS = 20;
 
     //Положение и размеры стакана
-    private final int GLASS_X = 0;
-    private final int GLASS_Y = 0;
-    private final int GLASS_WIDTH = 10;
-    private final int GLASS_HEIGHT = 20;
+    private static final int GLASS_X = 0;
+    private static final int GLASS_Y = 0;
+    private static final int GLASS_WIDTH = 10;
+    private static final int GLASS_HEIGHT = 20;
 
     //Положение и размеры панели очков
-    private final int SCOREBOARD_X = 11;
-    private final int SCOREBOARD_Y = 0;
-    private final int SCOREBOARD_WIDTH = 4;
-    private final int SCOREBOARD_HEIGHT = 2;
+    private static final int SCOREBOARD_X = 11;
+    private static final int SCOREBOARD_Y = 0;
+    private static final int SCOREBOARD_WIDTH = 4;
+    private static final int SCOREBOARD_HEIGHT = 2;
 
     //Пложение и размеры панели, отображающей следующий полимино
-    private final int NEXT_POLY_BOARD_X = 11;
-    private final int NEXT_POLY_BOARD_Y = 3;
-    private final int NEXT_POLY_BOARD_WIDTH = 4;
-    private final int NEXT_POLY_BOARD_HEIGHT = 4;
+    private static final int NEXT_POLY_BOARD_X = 11;
+    private static final int NEXT_POLY_BOARD_Y = 3;
+    private static final int NEXT_POLY_BOARD_WIDTH = 4;
+    private static final int NEXT_POLY_BOARD_HEIGHT = 4;
 
     //Положение и размеры панели, отображающей текущую скорость
-    private final int SPEEDBOARD_X = 11;
-    private final int SPEEDBOARD_Y = 8;
-    private final int SPEEDBOARD_WIDTH = 4;
-    private final int SPEEDBOARD_HEIGHT = 2;
+    private static final int SPEEDBOARD_X = 11;
+    private static final int SPEEDBOARD_Y = 8;
+    private static final int SPEEDBOARD_WIDTH = 4;
+    private static final int SPEEDBOARD_HEIGHT = 2;
 
     //Положение и размеры панели сообщения
-    private final int MSG_X=1;
-    private final int MSG_Y=5;
-    private final int MSG_WIDTH=13;
-    private final int MSG_HEIGHT=10;
+    private static final int MSG_X=2;
+    private static final int MSG_Y=7;
+    private static final int MSG_WIDTH=11;
+    private static final int MSG_HEIGHT=6;
 
     //Количество разрядов индикатора количества очков
-    private final int COUNT_SCOREBOARD_DIGITS = 4;
+    private static final int COUNT_SCOREBOARD_DIGITS = 4;
 
     //Количество разрядов индикатора текущей скорости
-    private final int COUNT_SPEEDBOARD_DIGITS = 4;
+    private static final int COUNT_SPEEDBOARD_DIGITS = 4;
 
     private final Color backgroundColor = new Color(180, 180, 180);
     private final Color interfaceColor = new Color(60, 60, 60);
@@ -96,7 +101,7 @@ public class Display extends JPanel {
         yStart = (int) (GLASS_Y * deltaY);
         width = (int) (GLASS_WIDTH * deltaX);
         height = (int) (GLASS_HEIGHT * deltaY);
-        glassPainter.paintGlass(g2d, gameObject.getGlass(), xStart, yStart, width, height);
+        glassPainter.paintGlass(g2d, gameObject.getGlass(), gameObject.getCurrentPolymino(), xStart, yStart, width, height);
 
         //Отрисовка табло набранных очков
         xStart = (int) (SCOREBOARD_X * deltaX);
@@ -124,7 +129,7 @@ public class Display extends JPanel {
         yStart = (int) (MSG_Y* deltaY);
         width = (int) (MSG_WIDTH* deltaX);
         height = (int) (MSG_HEIGHT * deltaY);
-        messagePainter.paintMessage(g2d, gameObject.getMessage(), backgroundColor, interfaceColor, xStart, yStart, width, height);
+        messagePainter.paintMessage(g2d, gameObject.getState(), backgroundColor, interfaceColor, xStart, yStart, width, height);
     }
 
 }

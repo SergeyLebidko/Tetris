@@ -5,40 +5,49 @@ import javax.swing.Timer;
 
 public class Game extends KeyAdapter implements ActionListener {
 
-    private final int WIDTH_GLASS = 10;
-    private final int HEIGHT_GLASS = 20;
+    private static final int WIDTH_GLASS = 10;
+    private static final int HEIGHT_GLASS = 20;
 
-    //Массив, сопоставляющий набранные очки, скорость и соответствующий ей интервал таймера
-    private final int[][] speedAndScoreParameters = {
-            {0, 999, 1, 1000},
-            {1000, 1999, 2, 900},
-            {2000, 2999, 3, 800},
-            {3000, 3999, 4, 700},
-            {4000, 4999, 5, 600},
-            {5000, 5999, 6, 500},
-            {6000, 6999, 7, 400},
-            {7000, 7999, 8, 300},
-            {8000, 8999, 9, 200},
-            {9000, 9999, 10, 100},
+    private static final int MIN_SCORE=0;
+    private static final int MAX_SCORE=9999;
+
+    private static final int MIN_SPEED=1;
+    private static final int MAX_SPEED=10;
+
+    //Массив, сопоставляющий значение скорости и соответствующий ей интервал таймера
+    private final int[][] speedAndMills = {
+            {1, 1000},
+            {2, 900},
+            {3, 800},
+            {4, 700},
+            {5, 600},
+            {6, 500},
+            {7, 400},
+            {8, 300},
+            {9, 200},
+            {10, 100}
     };
 
     //Массив, сопоставляющий количество очков, добавляемых игроку при построении одгной, двух и т.д. линий
-    private final int[] scoreIncrementValues = {10, 30, 60, 100};
+    private final int[] lineScore = {10, 20, 40, 70};
 
     private Display displayObject;
 
     private boolean[][] glass;
     private int score;
+    private int speed;
     private PolyminoCreator polyminoCreator;
     private Polymino currentPolymino;
     private Polymino nextPolymino;
     private Timer timer;
-    private String message;
+    private StateTypes state;
 
     public Game() {
         glass = new boolean[HEIGHT_GLASS][WIDTH_GLASS];
         polyminoCreator = new PolyminoCreator();
-        score=0;
+        score=MIN_SCORE;
+        speed=MIN_SPEED;
+        state = StateTypes.GAME;
         timer = new Timer(getTimerMiils(), this);
     }
 
@@ -52,10 +61,13 @@ public class Game extends KeyAdapter implements ActionListener {
             for (int j = 0; j < WIDTH_GLASS; j++) {
                 glass[i][j] = false;
             }
-        score = 0;
+        score = MIN_SCORE;
+        speed=MIN_SPEED;
+        state = StateTypes.GAME;
+
         currentPolymino = polyminoCreator.getNewPolymino();
         nextPolymino = polyminoCreator.getNewPolymino();
-        message="";
+
         displayObject.refreshDisplay();
         timer.setDelay(getTimerMiils());
         timer.start();
@@ -63,7 +75,7 @@ public class Game extends KeyAdapter implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("polyminoDown");
+
     }
 
     @Override
@@ -76,42 +88,28 @@ public class Game extends KeyAdapter implements ActionListener {
     }
 
     public int getSpeed(){
-        int result=0;
-        for (int[] param: speedAndScoreParameters){
-            if (score>=param[0] & score<=param[1]){
-                result=param[2];
-                break;
-            }
-        }
-        return result;
+        return speed;
     }
 
     public boolean[][] getGlass(){
-        //Временный код-заглушка
-        for (int i=0;i<HEIGHT_GLASS; i++)
-            for (int j=0;j<WIDTH_GLASS;j++){
-                glass[i][j]=true;
-            }
         return glass;
     }
 
-    public Polymino getNextPolymino(){
-        return null;
+    public Polymino getCurrentPolymino(){
+        return currentPolymino;
     }
 
-    public String getMessage(){
-        return "";
+    public Polymino getNextPolymino(){
+        return nextPolymino;
+    }
+
+    public StateTypes getState(){
+        return state;
     }
 
     private int getTimerMiils(){
-        int result=0;
-        for (int[] param: speedAndScoreParameters){
-            if (score>=param[0] & score<=param[1]){
-                result=param[3];
-                break;
-            }
-        }
-        return result;
+        for (int[] p: speedAndMills)if (speed==p[0])return p[1];
+        return 0;
     }
 
 }

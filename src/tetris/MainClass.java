@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class MainClass {
 
-    private static final int WIDTH_FRM = 600;
+    private static final int WIDTH_FRM = 640;
     private static final int HEIGHT_FRM = 800;
 
     private final JFrame frm;

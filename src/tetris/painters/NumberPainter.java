@@ -1,4 +1,4 @@
-package tetris;
+package tetris.painters;
 
 import java.awt.*;
 
@@ -6,8 +6,8 @@ public class NumberPainter {
 
     //Координаты точек сегментов, из которых строятся отдельные цифры привязаны к сетке.
     //Следующие две константы определяют количество ячеек этой сетки по горизонтали и по вертикали
-    private final int COUNT_X_CELLS=11;
-    private final int COUNT_Y_CELLS=24;
+    private static final int COUNT_X_CELLS=11;
+    private static final int COUNT_Y_CELLS=24;
 
     //Максимальное количество цифровых разрядов, которое будет отрисовано методом paintNumber
     private int maxPaintDigits;
