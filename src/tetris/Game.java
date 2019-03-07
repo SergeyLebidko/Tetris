@@ -38,20 +38,26 @@ public class Game extends KeyAdapter implements ActionListener {
         //Массив шаблонов для создания полимино
         private String[] standartPolyminoTemplates = {
                 "0000 0xx0 0xx0 0000",
+
                 "0000 xxXx 0000 0000",
                 "00x0 00X0 00x0 00x0",
+
                 "0000 00Xx 0xx0 0000",
                 "00x0 00Xx 000x 0000",
+
                 "0000 0xX0 00xx 0000",
                 "000x 00Xx 00x0 0000",
+
                 "0000 0xXx 0x00 0000",
                 "00x0 00X0 00xx 0000",
                 "000x 0xXx 0000 0000",
                 "0xx0 00X0 00x0 0000",
+
                 "0000 0xXx 000x 0000",
                 "00xx 00X0 00x0 0000",
                 "0x00 0xXx 0000 0000",
                 "00x0 00X0 0xx0 0000",
+
                 "0000 0xXx 00x0 0000",
                 "00x0 00Xx 00x0 0000",
                 "00x0 0xXx 0000 0000",
@@ -60,28 +66,114 @@ public class Game extends KeyAdapter implements ActionListener {
 
         private String[] extendedPolyminoTemplates = {
                 "0000 0xx0 0xx0 0000",
+
                 "0000 xxXx 0000 0000",
                 "00x0 00X0 00x0 00x0",
+
                 "0000 00Xx 0xx0 0000",
                 "00x0 00Xx 000x 0000",
+
                 "0000 0xX0 00xx 0000",
                 "000x 00Xx 00x0 0000",
+
                 "0000 0xXx 0x00 0000",
                 "00x0 00X0 00xx 0000",
                 "000x 0xXx 0000 0000",
                 "0xx0 00X0 00x0 0000",
+
                 "0000 0xXx 000x 0000",
                 "00xx 00X0 00x0 0000",
                 "0x00 0xXx 0000 0000",
                 "00x0 00X0 0xx0 0000",
+
                 "0000 0xXx 00x0 0000",
                 "00x0 00Xx 00x0 0000",
                 "00x0 0xXx 0000 0000",
-                "00x0 0xX0 00x0 0000"
+                "00x0 0xX0 00x0 0000",
+
+                "00x00 00x00 00X00 00x00 00x00",
+                "00000 00000 xxXxx 00000 00000",
+
+                "00000 0xx00 00Xx0 00x00 00000",
+                "00000 000x0 0xXx0 00x00 00000",
+                "00000 00x00 0xX00 00xx0 00000",
+                "00000 00x00 0xXx0 0x000 00000",
+
+                "00000 00xx0 0xX00 00x00 00000",
+                "00000 00x00 0xXx0 000x0 00000",
+                "00000 00x00 00Xx0 0xx00 00000",
+                "00000 0x000 0xXx0 00x00 00000",
+
+                "0x000 0x000 0X000 0xx00 00000",
+                "00000 00000 0xXxx 0x000 00000",
+                "00xx0 000X0 000x0 000x0 00000",
+                "00000 00000 0000x 0xxXx 00000",
+
+                "00x00 00x00 00X00 0xx00 00000",
+                "00000 00000 0x000 0xXxx 00000",
+                "00xx0 00X00 00x00 00x00 00000",
+                "00000 00000 0xxXx 0000x 00000",
+
+                "00x00 00x00 00Xx0 000x0 00000",
+                "00000 00000 00Xxx 0xx00 00000",
+                "00x00 00xX0 000x0 000x0 00000",
+                "00000 00000 000xx 0xxX0 00000",
+
+                "000x0 000x0 00xX0 00x00 00000",
+                "00000 00000 0xx00 00Xxx 00000",
+                "000x0 00Xx0 00x00 00x00 00000",
+                "00000 00000 0xxX0 000xx 00000",
+
+                "00000 00xx0 00xX0 000x0 00000",
+                "00000 00000 00xx0 0xXx0 00000",
+                "00000 00x00 00Xx0 00xx0 00000",
+                "00000 00000 0xXx0 0xx00 00000",
+
+                "00000 00xx0 00Xx0 00x00 00000",
+                "00000 00000 0xXx0 00xx0 00000",
+                "00000 000x0 00xX0 00xx0 00000",
+                "00000 00000 0xx00 0xXx0 00000",
+
+                "00000 0xxx0 00X00 00x00 00000",
+                "00000 000x0 0xXx0 000x0 00000",
+                "00000 00x00 00X00 0xxx0 00000",
+                "00000 0x000 0xXx0 0x000 00000",
+
+                "00000 0x0x0 0xXx0 00000 00000",
+                "00000 00xx0 00X00 00xx0 00000",
+                "00000 00000 0xXx0 0x0x0 00000",
+                "00000 0xx00 00X00 0xx00 00000",
+
+                "00000 0xxX0 000x0 000x0 00000",
+                "00000 000x0 000x0 0xxX0 00000",
+                "00000 0x000 0x000 0Xxx0 00000",
+                "00000 0Xxx0 0x000 0x000 00000",
+
+                "00000 0xx00 00Xx0 000x0 00000",
+                "00000 000x0 00Xx0 0xx00 00000",
+                "00000 0x000 0xX00 00xx0 00000",
+                "00000 00xx0 0xX00 0x000 00000",
+
+                "00000 00x00 0xxx0 00x00 00000",
+
+                "00x00 0xX00 00x00 00x00 00000",
+                "00000 000x0 0xxXx 00000 00000",
+                "00x00 00x00 00Xx0 00x00 00000",
+                "00000 00000 0xXxx 00x00 00000",
+
+                "00x00 00Xx0 00x00 00x00 00000",
+                "00000 00000 0xxXx 000x0 00000",
+                "000x0 000x0 00xX0 000x0 00000",
+                "00000 00000 00x00 0xXxx 00000",
+
+                "00000 0xx00 00X00 00xx0 00000",
+                "00000 000x0 0xXx0 0x000 00000",
+
+                "00000 00xx0 00X00 0xx00 00000",
+                "00000 0x000 0xXx0 000x0 00000",
         };
 
         Polymino getNewPolymino(int typePolyminoSet) {
-
             //Получаем случайный шаблон из набора шаблонов
             Random rnd = new Random();
             String polyminoTemplate=null;
@@ -143,7 +235,6 @@ public class Game extends KeyAdapter implements ActionListener {
 
             return new Polymino(lenghtDeltaArrs, dx, dy, matrForDisplay, isRotate);
         }
-
     }
 
     public Game() {
@@ -194,17 +285,11 @@ public class Game extends KeyAdapter implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-
-        //Тестовый код
-        System.out.println("Таймер");
-    }
+    public void actionPerformed(ActionEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
-
         //Тестовый код
-        System.out.println("Кнопка");
         if (e.getKeyCode()==KeyEvent.VK_SPACE)displayObject.showPauseDialog();
         if (e.getKeyCode()==KeyEvent.VK_ESCAPE)displayObject.showFinalGameDialog();
     }

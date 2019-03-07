@@ -41,7 +41,9 @@ public class NumberPainter {
         this.maxPaintDigits = maxPaintDigits;
     }
 
-    public void paintNumber(Graphics2D g2d, int value, int xStart, int yStart, int width, int height) {
+    public void paintNumber(Graphics2D g2d, Color numberColor, int value, int xStart, int yStart, int width, int height) {
+        g2d.setColor(numberColor);
+
         String numberStr = "" + value;
         int currentNumber;                             //Текущая выводимая цифра
         int currentDigit = 0;                          //Номер выводимого разряда
