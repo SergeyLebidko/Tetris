@@ -29,7 +29,7 @@ public class MainClass {
         frm.setContentPane(display);
         frm.setVisible(true);
 
-        game.startNewGame();
+        game.startNewGame(Game.STANDART_GLASS, Game.STANDART_POLYMINO_SET);
     }
 
     public static void main(String[] args) {

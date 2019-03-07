@@ -20,15 +20,15 @@ public class Polymino {
     private boolean isRotate;
 
     //Матрица, необходимая для корректного отображения полимино в областях предпросмотра
-    private boolean[][] matr;
+    private boolean[][] matrForDisplay;
 
-    public Polymino(int lenghtPolymino, int[] dx, int[] dy, boolean[][] matr, boolean isRotate) {
+    public Polymino(int lenghtPolymino, int[] dx, int[] dy, boolean[][] matrForDisplay, boolean isRotate) {
         this.lenghtPolymino = lenghtPolymino;
         this.dx = dx;
         this.dy = dy;
         xCenter = 0;
         yCenter = 0;
-        this.matr = matr;
+        this.matrForDisplay = matrForDisplay;
         this.isRotate = isRotate;
     }
 
@@ -55,8 +55,8 @@ public class Polymino {
         return result;
     }
 
-    public boolean[][] getMatr() {
-        return matr;
+    public boolean[][] getMatrForDisplay() {
+        return matrForDisplay;
     }
 
     public void rightShift() {
