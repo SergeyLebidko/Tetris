@@ -199,7 +199,7 @@ public class Display extends JPanel {
         JLabel msg = new JLabel("Пауза");
         msg.setFont(new Font("Arial", Font.PLAIN, 20));
         msgPane.add(msg);
-        JOptionPane.showMessageDialog(this, msgPane, "", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showConfirmDialog(this, msgPane, "", (-1), JOptionPane.PLAIN_MESSAGE);
     }
 
     public void setGameObject(Game gameObject) {

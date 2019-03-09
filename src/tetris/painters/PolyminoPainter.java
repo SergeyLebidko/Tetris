@@ -7,6 +7,7 @@ import java.awt.*;
 public class PolyminoPainter {
 
     public void paintPolymino(Graphics2D g2d, Color polyminoColor, Polymino polymino, int xStart, int yStart, int width, int height) {
+        if (polymino==null)return;
         g2d.setColor(polyminoColor);
 
         double widthCell, heightCell;      //Ширина и высота ячейкиа

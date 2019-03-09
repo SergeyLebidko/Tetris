@@ -176,11 +176,11 @@ public class Game extends KeyAdapter implements ActionListener {
         Polymino getNewPolymino(int typePolyminoSet) {
             //Получаем случайный шаблон из набора шаблонов
             Random rnd = new Random();
-            String polyminoTemplate=null;
-            if (typePolyminoSet==STANDART_POLYMINO_SET){
+            String polyminoTemplate = null;
+            if (typePolyminoSet == STANDART_POLYMINO_SET) {
                 polyminoTemplate = standartPolyminoTemplates[rnd.nextInt(standartPolyminoTemplates.length)];
             }
-            if (typePolyminoSet==EXTENDED_POLYMINO_SET){
+            if (typePolyminoSet == EXTENDED_POLYMINO_SET) {
                 polyminoTemplate = extendedPolyminoTemplates[rnd.nextInt(extendedPolyminoTemplates.length)];
             }
 
@@ -238,7 +238,8 @@ public class Game extends KeyAdapter implements ActionListener {
     }
 
     public Game() {
-        timer = new Timer(getTimerMiils(), this);
+        speed = MIN_SPEED;
+        timer = new Timer(getTimerMiils(speed), this);
         polyminoCreator = new PolyminoCreator();
     }
 
@@ -247,22 +248,22 @@ public class Game extends KeyAdapter implements ActionListener {
     }
 
     public void startNewGame(int glassType, int polyminoSet) {
-        if (timer.isRunning())timer.stop();
+        if (timer.isRunning()) timer.stop();
 
         //Сохраняем параметры новой игры
-        currentGlassType=glassType;
-        currentPolyminoSet=polyminoSet;
+        currentGlassType = glassType;
+        currentPolyminoSet = polyminoSet;
 
         //Создаем новый стакан
-        if (glassType==STANDART_GLASS){
-            widthGlass=10;
-            heightGlass=20;
+        if (glassType == STANDART_GLASS) {
+            widthGlass = 10;
+            heightGlass = 20;
         }
-        if (glassType==EXTENDED_GLASS){
-            widthGlass=20;
-            heightGlass=40;
+        if (glassType == EXTENDED_GLASS) {
+            widthGlass = 20;
+            heightGlass = 40;
         }
-        glass=new boolean[heightGlass][widthGlass];
+        glass = new boolean[heightGlass][widthGlass];
         for (int i = 0; i < heightGlass; i++)
             for (int j = 0; j < widthGlass; j++) {
                 glass[i][j] = false;
@@ -280,50 +281,12 @@ public class Game extends KeyAdapter implements ActionListener {
         displayObject.refreshDisplay();
 
         //Устанавливаем интервал для таймера сдвига фигурок и запускаем таймер
-        timer.setDelay(getTimerMiils());
+        timer.setDelay(getTimerMiils(speed));
         timer.start();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {}
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        //Тестовый код
-        if (e.getKeyCode()==KeyEvent.VK_SPACE)displayObject.showPauseDialog();
-        if (e.getKeyCode()==KeyEvent.VK_ESCAPE)displayObject.showFinalGameDialog();
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public boolean[][] getGlass() {
-        return glass;
-    }
-
-    public Polymino getCurrentPolymino() {
-        return currentPolymino;
-    }
-
-    public Polymino getNextPolymino() {
-        return nextPolymino;
-    }
-
-    public int getCurrentGlassType(){
-        return currentGlassType;
-    }
-
-    public int getCurrentPolyminoSet(){
-        return currentPolyminoSet;
-    }
-
-    private int getTimerMiils() {
-        switch (speed) {
+    private int getTimerMiils(int s) {
+        switch (s) {
             case 1:
                 return 1000;
             case 2:
@@ -349,6 +312,264 @@ public class Game extends KeyAdapter implements ActionListener {
         }
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Полимино вниз!");
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        //Пауза
+        if (key == KeyEvent.VK_ENTER) {
+            timer.stop();
+            displayObject.showPauseDialog();
+            timer.start();
+            return;
+        }
+
+        //Увеличить скорость (нажата клавиша +)
+        if (key == 107) {
+            speed++;
+            if (speed > MAX_SPEED) {
+                speed = MAX_SPEED;
+                return;
+            }
+            timer.setDelay(getTimerMiils(speed));
+            displayObject.refreshDisplay();
+            return;
+        }
+
+        //Уменьшить скорость (нажата клавиша -)
+        if (key == 109) {
+            speed--;
+            if (speed < MIN_SPEED) {
+                speed = MIN_SPEED;
+                return;
+            }
+            timer.setDelay(getTimerMiils(speed));
+            displayObject.refreshDisplay();
+            return;
+        }
+
+    }
+
+
+    //Метод сдвигает полимино p влево в стакане g. Возвращает истина/или ложь в зависимости от успеха операции
+    private boolean polyminoToLeft(Polymino p, boolean[][] g) {
+        int xStart, yStart;
+        xStart = p.getXCenterCoord();
+        yStart = p.getYCenterCoord();
+        p.leftShift();
+        if (isLeftExit(p) || isPolyminoCrash(p, g)) {
+            p.setXCenterCoord(xStart);
+            p.setYCenterCoord(yStart);
+            return false;
+        }
+        return true;
+    }
+
+    //Метод сдвигает полимино p вправо в стакане g. Возвращает истина/или ложь в зависимости от успеха операции
+    private boolean polyminoToRight(Polymino p, boolean[][] g) {
+        int xStart, yStart;
+        xStart = p.getXCenterCoord();
+        yStart = p.getYCenterCoord();
+        p.rightShift();
+        if (isRightExit(p, g[0].length) || isPolyminoCrash(p, g)) {
+            p.setXCenterCoord(xStart);
+            p.setYCenterCoord(yStart);
+            return false;
+        }
+        return true;
+    }
+
+    //Метод сдвигает полимино p вниз в стакане g. Возвращает истина/или ложь в зависимости от успеха операции
+    private boolean polyminoToDown(Polymino p, boolean[][] g) {
+        int xStart, yStart;
+        xStart = p.getXCenterCoord();
+        yStart = p.getYCenterCoord();
+        p.downShift();
+        if (isDownExit(p, g.length) || isPolyminoCrash(p, g)) {
+            p.setXCenterCoord(xStart);
+            p.setYCenterCoord(yStart);
+            return false;
+        }
+        return true;
+    }
+
+    //Метод вращает полимино p вправо в стакане g. Возвращает истина/или ложь в зависимости от успеха операции
+    private boolean polyminoRotate(Polymino p, boolean[][] g) {
+        int xStart = p.getXCenterCoord();
+        int yStart = p.getYCenterCoord();
+        int wg, hg;
+        wg = g[0].length;
+        hg = g.length;
+        boolean success, isRE, isLE, isDE, isPC;
+        p.rotateRight();
+
+        //Если нет выхода за пределы стакана и нет пересечения с другими мономино в стакане, то вращение успешно
+        isRE=isRightExit(p, wg);
+        isLE=isLeftExit(p);
+        isDE=isDownExit(p,hg);
+        isPC=isPolyminoCrash(p,g);
+        success=!(isDE || isLE || isRE || isPC);
+        if (success)return true;
+
+        //Если выход за нижнюю границу - вращаем полимино в обратную сторону и выходим
+        if (isDownExit(p,hg)){
+            p.rotateLeft();
+            return false;
+        }
+
+        //Если выход за правое поле, то пробуем сдвинуть полимино влево
+        if (isRE){
+            while (isRightExit(p,wg)){
+                p.leftShift();
+            }
+        }
+
+        //Если выход за левое поле, то пробуем сдвинуть полимино вправо
+        if (isLE){
+            while (isLeftExit(p)){
+                p.rightShift();
+            }
+        }
+
+        //Если сдвиги не решили проблему, то делаем откат
+        isPC=isPolyminoCrash(p,g);
+        if (isPC){
+            p.rotateLeft();
+            p.setXCenterCoord(xStart);
+            p.setYCenterCoord(yStart);
+            return false;
+        }
+
+        return true;
+    }
+
+
+    //Метод выполняет первоначальное размещение полимино в стакане
+    //Первоначальное размещение предполагает, что полимино будет иметь такие координаты, что:
+    //  1) Будет располагаться как можно ближе к центральной оси стакана
+    //  2) В стакане будет находиться только нижний ряд мономино, входящих в полимино
+    //Метод возвращает полимино с требуемыми координатами
+    private Polymino polyminoInitPlace(Polymino p, boolean[][] g) {
+        //ВСТАВИТЬ КОД РАЗМЕЩЕНИЯ!!!
+        return null;
+    }
+
+    //Метод переносит полимино в стакан (то есть помечает соответствующие ячейки стакана как занятые мономино)
+    private boolean[][] polyminoToGlass(Polymino p, boolean[][] g) {
+        int wg, hg;
+        int[] x;
+        int[] y;
+        x = p.getXCoords();
+        y = p.getYCoords();
+        wg = g[0].length;
+        hg = g.length;
+        for (int i = 0; i < p.getLenghtPolymino(); i++) {
+            if (x[i] >= 0 & x[i] < wg & y[i] >= 0 & y[i] < hg) {
+                g[y[i]][x[i]] = true;
+            }
+        }
+        return g;
+    }
+
+
+    //Метод возвращает true, если полимино выходит за левый край стакана
+    //Сам стакан в метод не передается, так как левый край стакана любого размера ограничен x-координатой 0
+    private boolean isLeftExit(Polymino p) {
+        int[] x;
+        x = p.getXCoords();
+        for (int i = 0; i < p.getLenghtPolymino(); i++) {
+            if (x[i] < 0) return true;
+        }
+        return false;
+    }
+
+    //Метод возвращает true, если полимино выходит за правый край стакана
+    //Параметр wGlass - ширина стакана
+    private boolean isRightExit(Polymino p, int wGlass) {
+        int[] x;
+        x = p.getXCoords();
+        for (int i = 0; i < p.getLenghtPolymino(); i++) {
+            if (x[i] >= wGlass) return true;
+        }
+        return false;
+    }
+
+    //Метод возвращает true, если полимино выходит за нижний край стакана
+    //Параметр hGlass - высота стакана
+    private boolean isDownExit(Polymino p, int hGlass) {
+        int[] y;
+        y = p.getYCoords();
+        for (int i = 0; i < p.getLenghtPolymino(); i++) {
+            if (y[i] >= hGlass) return true;
+        }
+        return false;
+    }
+
+    //Метод возвращает true, если полимино пересекается хотя бы с одним мономино в стакане
+    private boolean isPolyminoCrash(Polymino p, boolean[][] g) {
+        int wg, hg;
+        int[] x;
+        int[] y;
+        x = p.getXCoords();
+        y = p.getYCoords();
+        wg = g[0].length;
+        hg = g.length;
+        for (int i = 0; i < p.getLenghtPolymino(); i++) {
+            if (x[i] >= 0 & x[i] < wg & y[i] >= 0 & y[i] < hg) {
+                if (g[y[i]][x[i]]) return true;
+            }
+        }
+        return false;
+    }
+
+
+    //Метод убирает все полные линии в стакане, которые находит
+    private boolean[][] deleteFullLines(boolean[][] g) {
+        int wg, hg;
+        boolean isFullLine;
+        wg = g[0].length;
+        hg = g.length;
+        for (int i = (hg - 1); i >= 0; i--) {
+            isFullLine = true;
+            while (isFullLine) {
+                for (int j = 0; j < wg; j++) {
+                    isFullLine = isFullLine & g[i][j];
+                }
+                if (isFullLine) {
+                    for (int j = 0; j < wg; j++) {
+                        for (int k = i; k >= 0; k--) {
+                            g[k][j] = ((k > 0) ? g[k - 1][j] : false);
+                        }
+                    }
+                }
+            }
+        }
+        return g;
+    }
+
+    //Метод возвращает количество полных линий в стакане g
+    private int getCountFullLine(boolean[][] g) {
+        int wg, hg;
+        int countFullLine = 0;
+        boolean isFullLine;
+        wg = g[0].length;
+        hg = g.length;
+        for (int i = 0; i < hg; i++) {
+            isFullLine = true;
+            for (int j = 0; j < wg; j++) {
+                isFullLine = isFullLine & g[i][j];
+            }
+            if (isFullLine) countFullLine++;
+        }
+        return countFullLine;
+    }
+
+    //Метод возвращает количество очков, соответствующее количеству набранных линий
     private int getScoreForLines(int linesCount) {
         switch (linesCount) {
             case 0:
@@ -364,6 +585,36 @@ public class Game extends KeyAdapter implements ActionListener {
             default:
                 return 35;
         }
+    }
+
+
+    //Блок открытых методов, используемых классом Display
+    public int getScore() {
+        return score;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public boolean[][] getGlass() {
+        return glass;
+    }
+
+    public Polymino getCurrentPolymino() {
+        return currentPolymino;
+    }
+
+    public Polymino getNextPolymino() {
+        return nextPolymino;
+    }
+
+    public int getCurrentGlassType() {
+        return currentGlassType;
+    }
+
+    public int getCurrentPolyminoSet() {
+        return currentPolyminoSet;
     }
 
 }

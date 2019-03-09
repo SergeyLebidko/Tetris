@@ -11,6 +11,7 @@ public class GlassPainter {
     public void paintGlass(Graphics2D g2d, Color glassColor, Color monominoColor, boolean[][] glass, Polymino polymino, int xStart, int yStart, int width, int height) {
         g2d.setColor(glassColor);
         g2d.fillRect(xStart,yStart,width,height);
+        if (glass==null)return;
         g2d.setColor(monominoColor);
 
         double widthCell, heightCell;      //Ширина и высота ячейки стакана

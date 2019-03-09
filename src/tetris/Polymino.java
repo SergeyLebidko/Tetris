@@ -32,9 +32,20 @@ public class Polymino {
         this.isRotate = isRotate;
     }
 
-    public void setCoords(int x, int y) {
+    public void setXCenterCoord(int x) {
         xCenter = x;
+    }
+
+    public void setYCenterCoord(int y) {
         yCenter = y;
+    }
+
+    public int getXCenterCoord() {
+        return xCenter;
+    }
+
+    public int getYCenterCoord() {
+        return yCenter;
     }
 
     public int getLenghtPolymino() {
@@ -67,10 +78,6 @@ public class Polymino {
         xCenter--;
     }
 
-    public void upShift() {
-        yCenter--;
-    }
-
     public void downShift() {
         yCenter++;
     }
@@ -84,7 +91,7 @@ public class Polymino {
     }
 
     private void rotate(int direction) {
-        if (!isRotate)return;
+        if (!isRotate) return;
         int sinAlpha;
         int xNext, yNext;
         sinAlpha = 0;
