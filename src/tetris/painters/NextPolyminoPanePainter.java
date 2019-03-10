@@ -4,9 +4,9 @@ import tetris.Polymino;
 
 import java.awt.*;
 
-public class PolyminoPainter {
+public class NextPolyminoPanePainter {
 
-    public void paintPolymino(Graphics2D g2d, Color polyminoColor, Polymino polymino, int xStart, int yStart, int width, int height) {
+    public void paintNextPolyminoPane(Graphics2D g2d, Color polyminoColor, Polymino polymino, int xStart, int yStart, int width, int height) {
         if (polymino==null)return;
         g2d.setColor(polyminoColor);
 

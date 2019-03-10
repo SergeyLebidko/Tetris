@@ -2,7 +2,7 @@ package tetris;
 
 import tetris.painters.GlassPainter;
 import tetris.painters.NumberPainter;
-import tetris.painters.PolyminoPainter;
+import tetris.painters.NextPolyminoPanePainter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,7 +62,7 @@ public class Display extends JPanel {
     private final NumberPainter speedboardPainter = new NumberPainter(COUNT_SPEEDBOARD_DIGITS);
 
     //Объект необходим для отрисовки полимино, который выпадет в стакан после текущего
-    private final PolyminoPainter polyminoPainter = new PolyminoPainter();
+    private final NextPolyminoPanePainter nextPolyminoPanePainter = new NextPolyminoPanePainter();
 
     //Набор полей, необходимых для реализации всплывающего меню
     private final String NEW_GAME="NEW_GAME";
@@ -90,7 +90,12 @@ public class Display extends JPanel {
     private MouseAdapter ma = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
-            if (e.getButton() == MouseEvent.BUTTON3) popupMenu.show(e.getComponent(), e.getX(), e.getY());
+            if (e.getButton() == MouseEvent.BUTTON3) {
+                popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                gameObject.pause();
+                return;
+            }
+            gameObject.resume();
         }
     };
 
@@ -135,7 +140,8 @@ public class Display extends JPanel {
                     JLabel msg = new JLabel(helpMsg);
                     msg.setFont(new Font("Arial", Font.PLAIN, 20));
                     msgPane.add(msg);
-                    JOptionPane.showMessageDialog(Display.this, msgPane, "Подсказка", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showConfirmDialog(Display.this, msgPane, "Подсказка", (-1), JOptionPane.PLAIN_MESSAGE);
+                    gameObject.resume();
                 }
             }
         }
@@ -211,6 +217,63 @@ public class Display extends JPanel {
         paintComponent(getGraphics());
     }
 
+    public void refreshGlass(){
+        Graphics2D g2d=(Graphics2D) getGraphics();
+        int xStart, yStart;
+        int width, height;
+        double deltaX, deltaY;
+        deltaX = (double) getWidth() / COUNT_X_CELLS;
+        deltaY = (double) getHeight() / COUNT_Y_CELLS;
+        xStart = (int) (GLASS_X * deltaX);
+        yStart = (int) (GLASS_Y * deltaY);
+        width = (int) (GLASS_WIDTH * deltaX);
+        height = (int) (GLASS_HEIGHT * deltaY);
+        glassPainter.paintGlass(g2d, glassColor, interfaceColor, gameObject.getGlass(), gameObject.getCurrentPolymino(), xStart, yStart, width, height);
+    }
+
+    public void refreshScoreBoard(){
+        Graphics2D g2d=(Graphics2D) getGraphics();
+        int xStart, yStart;
+        int width, height;
+        double deltaX, deltaY;
+        deltaX = (double) getWidth() / COUNT_X_CELLS;
+        deltaY = (double) getHeight() / COUNT_Y_CELLS;
+        xStart = (int) (SCOREBOARD_X * deltaX);
+        yStart = (int) (SCOREBOARD_Y * deltaY);
+        width = (int) (SCOREBOARD_WIDTH * deltaX);
+        height = (int) (SCOREBOARD_HEIGHT * deltaY);
+        scoreboardPainter.paintNumber(g2d, interfaceColor, gameObject.getScore(), xStart, yStart, width, height);
+    }
+
+    public void refreshSpeedBoard(){
+        Graphics2D g2d=(Graphics2D) getGraphics();
+        int xStart, yStart;
+        int width, height;
+        double deltaX, deltaY;
+        deltaX = (double) getWidth() / COUNT_X_CELLS;
+        deltaY = (double) getHeight() / COUNT_Y_CELLS;
+        //Отрисовка табло скорости
+        xStart = (int) (SPEEDBOARD_X * deltaX);
+        yStart = (int) (SPEEDBOARD_Y * deltaY);
+        width = (int) (SPEEDBOARD_WIDTH * deltaX);
+        height = (int) (SPEEDBOARD_HEIGHT * deltaY);
+        speedboardPainter.paintNumber(g2d, interfaceColor, gameObject.getSpeed(), xStart, yStart, width, height);
+    }
+
+    public void refreshNextPolyminoPane(){
+        Graphics2D g2d=(Graphics2D) getGraphics();
+        int xStart, yStart;
+        int width, height;
+        double deltaX, deltaY;
+        deltaX = (double) getWidth() / COUNT_X_CELLS;
+        deltaY = (double) getHeight() / COUNT_Y_CELLS;
+        xStart = (int) (NEXT_POLY_BOARD_X * deltaX);
+        yStart = (int) (NEXT_POLY_BOARD_Y * deltaY);
+        width = (int) (NEXT_POLY_BOARD_WIDTH * deltaX);
+        height = (int) (NEXT_POLY_BOARD_HEIGHT * deltaY);
+        nextPolyminoPanePainter.paintNextPolyminoPane(g2d, interfaceColor, gameObject.getNextPolymino(), xStart, yStart, width, height);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -240,7 +303,7 @@ public class Display extends JPanel {
         yStart = (int) (NEXT_POLY_BOARD_Y * deltaY);
         width = (int) (NEXT_POLY_BOARD_WIDTH * deltaX);
         height = (int) (NEXT_POLY_BOARD_HEIGHT * deltaY);
-        polyminoPainter.paintPolymino(g2d, interfaceColor, gameObject.getNextPolymino(), xStart, yStart, width, height);
+        nextPolyminoPanePainter.paintNextPolyminoPane(g2d, interfaceColor, gameObject.getNextPolymino(), xStart, yStart, width, height);
 
         //Отрисовка табло скорости
         xStart = (int) (SPEEDBOARD_X * deltaX);
