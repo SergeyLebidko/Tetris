@@ -6,8 +6,8 @@ public class NumberPainter {
 
     //Координаты точек сегментов, из которых строятся отдельные цифры привязаны к сетке.
     //Следующие две константы определяют количество ячеек этой сетки по горизонтали и по вертикали
-    private static final int COUNT_X_CELLS=11;
-    private static final int COUNT_Y_CELLS=24;
+    private static final int COUNT_X_CELLS = 11;
+    private static final int COUNT_Y_CELLS = 24;
 
     //Максимальное количество цифровых разрядов, которое будет отрисовано методом paintNumber
     private int maxPaintDigits;
@@ -55,18 +55,18 @@ public class NumberPainter {
         double xTmp, yTmp;
 
 
-        widthDigit=(double)width/maxPaintDigits;
-        heightDigit=height;
-        deltaX=widthDigit/COUNT_X_CELLS;
-        deltaY=heightDigit/COUNT_Y_CELLS;
+        widthDigit = (double) width / maxPaintDigits;
+        heightDigit = height;
+        deltaX = widthDigit / COUNT_X_CELLS;
+        deltaY = heightDigit / COUNT_Y_CELLS;
 
         widthDigit = (double) width / maxPaintDigits;
         while (true) {
 
             //Получаем текущую выводимую цифру и координаты её левого верхнего угла
             currentNumber = numberStr.charAt(numberStr.length() - (currentDigit + 1)) - 48;
-            xStartDigit=(xStart+width)-(widthDigit*(currentDigit+1));
-            yStartDigit=yStart;
+            xStartDigit = (xStart + width) - (widthDigit * (currentDigit + 1));
+            yStartDigit = yStart;
 
             //Перебираем сегменты, входящие в текущую выводимую цифру
             for (int p : numbersSegment[currentNumber]) {
@@ -83,12 +83,12 @@ public class NumberPainter {
                 }
 
                 //Каждая строка массива result - это координаты очередного сегмента
-                g2d.fillPolygon(x,y,countPointsInSegment);
+                g2d.fillPolygon(x, y, countPointsInSegment);
             }
 
             //Переходим к следующему разряду
             currentDigit++;
-            if (currentDigit==numberStr.length() || currentDigit==maxPaintDigits)break;
+            if (currentDigit == numberStr.length() || currentDigit == maxPaintDigits) break;
         }
     }
 

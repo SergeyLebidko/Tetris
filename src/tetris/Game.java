@@ -295,23 +295,23 @@ public class Game extends KeyAdapter implements ActionListener {
     private int getTimerMiils(int s) {
         switch (s) {
             case 1:
-                return 1000;
+                return 550;
             case 2:
-                return 900;
-            case 3:
-                return 800;
-            case 4:
-                return 700;
-            case 5:
-                return 600;
-            case 6:
                 return 500;
-            case 7:
+            case 3:
+                return 450;
+            case 4:
                 return 400;
-            case 8:
+            case 5:
+                return 350;
+            case 6:
                 return 300;
-            case 9:
+            case 7:
+                return 250;
+            case 8:
                 return 200;
+            case 9:
+                return 150;
             case 10:
                 return 100;
             default:
@@ -326,10 +326,100 @@ public class Game extends KeyAdapter implements ActionListener {
         boolean successDown;
         successDown = polyminoToDown(currentPolymino, glass);
         if (successDown) {
-            displayObject.refreshGlass();
+            displayObject.refreshDisplay();
+            return;
+        }
+        polyminoOnTheBottom();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (state == GAME_STOP) return;
+
+        int key = e.getKeyCode();
+
+        //Пауза
+        if (key == KeyEvent.VK_ENTER) {
+            pause();
+            displayObject.showPauseDialog();
+            resume();
             return;
         }
 
+        //Увеличить скорость (нажата клавиша +)
+        if (key == 107) {
+            speed++;
+            if (speed > MAX_SPEED) {
+                speed = MAX_SPEED;
+                return;
+            }
+            timer.setDelay(getTimerMiils(speed));
+            displayObject.refreshDisplay();
+            return;
+        }
+
+        //Уменьшить скорость (нажата клавиша -)
+        if (key == 109) {
+            speed--;
+            if (speed < MIN_SPEED) {
+                speed = MIN_SPEED;
+                return;
+            }
+            timer.setDelay(getTimerMiils(speed));
+            displayObject.refreshDisplay();
+            return;
+        }
+
+        //Сдвиг влево
+        if (key == 37) {
+            boolean successShift;
+            successShift = polyminoToLeft(currentPolymino, glass);
+            if (successShift) {
+                displayObject.refreshDisplay();
+            }
+            return;
+        }
+
+        //Сдвиг вправо
+        if (key == 39) {
+            boolean successShift;
+            successShift = polyminoToRight(currentPolymino, glass);
+            if (successShift) {
+                displayObject.refreshDisplay();
+            }
+            return;
+        }
+
+        //Поворот
+        if (key == KeyEvent.VK_SPACE) {
+            boolean successRotate;
+            successRotate = polyminoRotate(currentPolymino, glass);
+            if (successRotate) {
+                displayObject.refreshDisplay();
+            }
+            return;
+        }
+
+        //Сдвиг вниз на одну клетку
+        if (key == 40) {
+            polyminoToDown(currentPolymino, glass);
+            displayObject.refreshDisplay();
+            return;
+        }
+
+        //Сдвиг вниз на все возможные клетки
+        if (key==38){
+            while (polyminoToDown(currentPolymino, glass)) {}
+            displayObject.refreshDisplay();
+            polyminoOnTheBottom();
+        }
+
+    }
+
+    //Метод вызывается, когда полимино уже не может двигаться вниз
+    //Метод подсчитывает количество стертых линий, обновляет табло очков, создает новый полимино и размещает его,
+    //а также проверяет условие окнчания игры
+    private void polyminoOnTheBottom(){
         //Переносим полимино в стакан
         polyminoToGlass(currentPolymino, glass);
 
@@ -345,11 +435,11 @@ public class Game extends KeyAdapter implements ActionListener {
             if (score > MAX_SCORE) score = MIN_SCORE;
             deleteFullLines(glass);
         }
-        displayObject.refreshScoreBoard();
+        displayObject.refreshDisplay();
 
         //Размещаем новый полимино в стакане
         polyminoInitPlace(currentPolymino, glass);
-        displayObject.refreshGlass();
+        displayObject.refreshDisplay();
 
         //Проверяем условие окончания игры
         if (isPolyminoCrash(currentPolymino, glass)) {
@@ -361,110 +451,6 @@ public class Game extends KeyAdapter implements ActionListener {
             return;
         }
     }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (state == GAME_STOP) return;
-
-        int key = e.getKeyCode();
-
-        //Пауза
-        if (key == KeyEvent.VK_ENTER) {
-            timer.stop();
-            displayObject.showPauseDialog();
-            timer.start();
-            return;
-        }
-
-        //Увеличить скорость (нажата клавиша +)
-        if (key == 107) {
-            speed++;
-            if (speed > MAX_SPEED) {
-                speed = MAX_SPEED;
-                return;
-            }
-            timer.setDelay(getTimerMiils(speed));
-            displayObject.refreshSpeedBoard();
-            return;
-        }
-
-        //Уменьшить скорость (нажата клавиша -)
-        if (key == 109) {
-            speed--;
-            if (speed < MIN_SPEED) {
-                speed = MIN_SPEED;
-                return;
-            }
-            timer.setDelay(getTimerMiils(speed));
-            displayObject.refreshSpeedBoard();
-            return;
-        }
-
-        //Сдвиг влево
-        if (key == 37) {
-            boolean successShift;
-            successShift = polyminoToLeft(currentPolymino, glass);
-            if (successShift) displayObject.refreshGlass();
-            return;
-        }
-
-        //Сдвиг вправо
-        if (key == 39) {
-            boolean successShift;
-            successShift = polyminoToRight(currentPolymino, glass);
-            if (successShift) displayObject.refreshGlass();
-            return;
-        }
-
-        //Поворот
-        if (key == KeyEvent.VK_SPACE) {
-            boolean successRotate;
-            successRotate = polyminoRotate(currentPolymino, glass);
-            if (successRotate) displayObject.refreshGlass();
-            return;
-        }
-
-        //Сдвиг вниз
-        if (key == 40) {
-            while (polyminoToDown(currentPolymino, glass)) {
-            }
-
-            //Переносим полимино в стакан
-            polyminoToGlass(currentPolymino, glass);
-
-            //Получаем следующий полимино
-            currentPolymino = nextPolymino;
-            nextPolymino = polyminoCreator.getNewPolymino(currentPolyminoSet);
-
-            //Подсчитываем количество собранных полных линий и удаляем их, обновляем количество набранных очков
-            int linesCount;
-            linesCount = getCountFullLine(glass);
-            if (linesCount != 0) {
-                score += getScoreForLines(linesCount);
-                if (score > MAX_SCORE) score = MIN_SCORE;
-                deleteFullLines(glass);
-            }
-            displayObject.refreshGlass();
-            displayObject.refreshScoreBoard();
-            displayObject.refreshNextPolyminoPane();
-
-            //Размещаем новый полимино в стакане
-            polyminoInitPlace(currentPolymino, glass);
-            displayObject.refreshGlass();
-
-            //Проверяем условие окончания игры
-            if (isPolyminoCrash(currentPolymino, glass)) {
-                timer.stop();
-                boolean isPlayStill;
-                isPlayStill = displayObject.showFinalGameDialog();
-                if (!isPlayStill) System.exit(0);
-                startNewGame(currentGlassType, currentPolyminoSet);
-                return;
-            }
-        }
-
-    }
-
 
     //Метод сдвигает полимино p влево в стакане g. Возвращает истина/или ложь в зависимости от успеха операции
     private boolean polyminoToLeft(Polymino p, boolean[][] g) {
@@ -558,7 +544,6 @@ public class Game extends KeyAdapter implements ActionListener {
         return true;
     }
 
-
     //Метод выполняет первоначальное размещение полимино в стакане
     //Первоначальное размещение предполагает, что полимино будет иметь такие координаты, что:
     //  1) Будет располагаться как можно ближе к центральной оси стакана
@@ -625,7 +610,6 @@ public class Game extends KeyAdapter implements ActionListener {
         return g;
     }
 
-
     //Метод возвращает true, если полимино выходит за левый край стакана
     //Сам стакан в метод не передается, так как левый край стакана любого размера ограничен x-координатой 0
     private boolean isLeftExit(Polymino p) {
@@ -675,7 +659,6 @@ public class Game extends KeyAdapter implements ActionListener {
         }
         return false;
     }
-
 
     //Метод убирает все полные линии в стакане, которые находит
     private boolean[][] deleteFullLines(boolean[][] g) {
@@ -735,7 +718,6 @@ public class Game extends KeyAdapter implements ActionListener {
                 return 35;
         }
     }
-
 
     //Блок открытых методов, используемых классом Display
     public void pause() {

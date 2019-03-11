@@ -7,7 +7,7 @@ import java.awt.*;
 public class NextPolyminoPanePainter {
 
     public void paintNextPolyminoPane(Graphics2D g2d, Color polyminoColor, Polymino polymino, int xStart, int yStart, int width, int height) {
-        if (polymino==null)return;
+        if (polymino == null) return;
         g2d.setColor(polyminoColor);
 
         double widthCell, heightCell;      //Ширина и высота ячейкиа
