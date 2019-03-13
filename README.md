@@ -15,18 +15,18 @@ NextPolyminoPainter, NumberPainter) собраны в отдельный пак�
 состоящих не из четырех, а из пяти квадратиков-мономино, и стакан большего размера: не 10х20, а 20х40.
 Игрок, с помощью всплывающего меню может переключаться между различными вариантами игры.
 
-![screenshot](screenshot_1)
+![screenshot](screenshot_1.jpg)
 
-![screenshot](screenshot_2)
+![screenshot](screenshot_2.jpg)
 
-![screenshot](screenshot_3)
+![screenshot](screenshot_3.jpg)
 
-![screenshot](screenshot_4)
+![screenshot](screenshot_4.jpg)
 
-![screenshot](screenshot_5)
+![screenshot](screenshot_5.jpg)
 
-![screenshot](screenshot_6)
+![screenshot](screenshot_6.jpg)
 
-![screenshot](screenshot_7)
+![screenshot](screenshot_7.jpg)
 
-![screenshot](screenshot_8)
+![screenshot](screenshot_8.jpg)
